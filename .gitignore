@@ -1,0 +1,6 @@
+syntax: glob
+
+.tmp
+font
+icons
+node_modules

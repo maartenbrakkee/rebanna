@@ -1,0 +1,38 @@
+{
+  "name": "rebanna",
+  "version": "0.1.0",
+  "description": "Rebanna is build to easily create a webfont with support of stacked icons.",
+  "main": "index.js",
+  "scripts": {
+    "babel": "babel src --watch --out-dir dist",
+    "clean": "node ./dist/clean.js && node ./dist/create-tmp-folder.js",
+    "split": "node ./dist/split-svg.js",
+    "start": "npm run svgo && npm run split && npm run webfont",
+    "svgo": "npm run clean && node ./dist/svgo.js",
+    "test": "node ./node_modules/eslint/bin/eslint.js \"src/**\"",
+    "webfont": "node ./dist/webfont.js"
+  },
+  "repository": "github:maartenbrakkee/rebanna",
+  "keywords": [
+    "svg",
+    "icons",
+    "stacked",
+    "icon font",
+    "font"
+  ],
+  "author": "Maarten Brakee <contact@maartenbrakkee.nl>",
+  "license": "MIT",
+  "homepage": "https://github.com/maartenbrakkee/rebanna",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^4.19.1"
+  },
+  "dependencies": {
+    "nconf": "^0.10.0",
+    "rimraf": "^2.6.2",
+    "svgo": "^1.0.5",
+    "webfont": "^8.1.3",
+    "xml2js": "^0.4.19"
+  }
+}
