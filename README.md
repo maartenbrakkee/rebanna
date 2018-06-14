@@ -1,6 +1,6 @@
 # Rebanna
 
-Rebanna is build to easily create a webfont with support of stacked icons. Inline SVG (sprites) are not always the best option, iconfonts are widley supported
+Rebanna is build to easily create a webfont with support of stacked icons.
 
 ## Getting started
 

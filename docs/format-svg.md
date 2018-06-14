@@ -1,6 +1,6 @@
 # Correctly formated SVG's
 
-Currently _Rebanna_ works with a maximum of 6 different color layers. Each layer should be grouped and each group should have an id.
+Currently _rebanna_ works with a maximum of 6 different color layers. Each layer should be grouped and each group should have an id.
 
 ## Example
 
