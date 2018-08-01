@@ -64,14 +64,14 @@ Next to the npm scripts, a CLI is available. Run `rebanna [command] [options]` t
 
 | Options | Description|
 | ------- |:-----------|
-| -c, --config | Path to a specific configuration file. |
-| --debug | Show extra information for debugging. |
-| -d, --destination | The destination for the generated webfont. |
-| --fontName | The name for the font. |
-| --fontClassName | The classname prefix for the icons. |
-| -i, --iconFolder | The source folder for the icons. |
-| --tempFolder | Temporary folder for processing. |
-| --template | Nunjucks template for generating HTML, CSS or SCSS. More information about Nunjucks templates can be found at: [https://bit.ly/2v0E7Ha](https://bit.ly/2v0E7Ha). |
+| `-c`, `--config` | Path to a specific configuration file. |
+| `--debug` | Show extra information for debugging. |
+| `-d`, `--destination` | The destination for the generated webfont. |
+| `--fontName` | The name for the font. |
+| `--fontClassName` | The classname prefix for the icons. |
+| `-i`, `--iconFolder` | The source folder for the icons. |
+| `--tempFolder` | Temporary folder for processing. |
+| `--template` | Nunjucks template for generating HTML, CSS or SCSS. More information about Nunjucks templates can be found at: [https://bit.ly/2v0E7Ha](https://bit.ly/2v0E7Ha). |
 
 ## About
 
