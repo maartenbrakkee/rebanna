@@ -30,7 +30,7 @@
 
     .icons {
       margin-bottom: 40px;
-      column-count: 5;
+      column-count: 2;
     }
 
     @font-face {
@@ -68,6 +68,16 @@
       {%- endif %}
       font-style: normal;
       font-weight: 400;
+    }
+
+    .{{ className }} {
+      font-size: 10rem !important;
+      margin-bottom: 1rem;
+    }
+    .{{ className }}-wrap {
+      text-align: center;
+      height: 12rem;
+      break-inside: avoid-column;
     }
 
     .{{ className }} {
