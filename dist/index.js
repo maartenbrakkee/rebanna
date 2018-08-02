@@ -18,6 +18,7 @@ var _require = require("child_process"),
     exec = _require.exec;
 
 var chalk = require("chalk");
+var chokidar = require("chokidar");
 var fs = require("fs");
 var rimraf = require("rimraf");
 var xml2js = require("xml2js");
@@ -35,7 +36,9 @@ var Rebanna = function () {
       fontClassName: "icon",
       iconFolder: "./icons",
       tempFolder: "./.tmp",
-      template: "./templates/template.html.njk"
+      template: "./templates/template.html.njk",
+      watch: false,
+      watchRunner: false
     };
   }
 
@@ -66,12 +69,12 @@ var Rebanna = function () {
         // run command to create webfont
         exec(cmd, function (err, stdout, stderr) {
           if (err) {
-            console.error("  \uD83D\uDCA5 ERROR: " + err);
+            console.error(chalk.red.bold("  \uD83D\uDCA5 ERROR: " + err));
             return;
           }
 
           if (stderr) {
-            console.error("  \uD83D\uDCA5 ERROR: " + stderr);
+            console.error(chalk.red.bold("  \uD83D\uDCA5 ERROR: " + stderr));
             return;
           }
 
@@ -79,7 +82,29 @@ var Rebanna = function () {
           console.log("  Webfont succesfully created 😄 🎉");
           callback();
         });
-      }]);
+      }], function (err, results) {
+        if (err) {
+          console.error(chalk.red.bold("  💥 ERROR: " + err + results));
+          process.exit(1);
+        }
+
+        // watch icon folder is watch option is enabled
+        if (options.watch && !options.watchRunner) {
+          // change watchRunner, thus running watch command once
+          _self.options.watchRunner = true;
+
+          var watcher = chokidar.watch(options.iconFolder, {
+            ignoreInitial: true
+          });
+
+          console.log(chalk.white("\n  Starting watching iconFolder for changes."));
+
+          watcher.on("all", function (event, path) {
+            console.log(chalk.white("\n  File " + path + " was changed (" + chalk.gray(event) + ").\n"));
+            _self.build();
+          });
+        }
+      });
     }
   }, {
     key: "clean",

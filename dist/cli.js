@@ -42,6 +42,10 @@ var cli = (0, _meow2.default)(rebanna.getHelp(), {
     },
     template: {
       type: "string"
+    },
+    watch: {
+      type: "boolean",
+      default: false
     }
   }
 });

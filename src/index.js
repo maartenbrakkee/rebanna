@@ -2,6 +2,7 @@
 
 const { exec } = require("child_process");
 const chalk = require("chalk");
+const chokidar = require("chokidar");
 const fs = require("fs");
 const rimraf = require("rimraf");
 const xml2js = require("xml2js");
@@ -76,6 +77,8 @@ export default class Rebanna {
       iconFolder: "./icons",
       tempFolder: "./.tmp",
       template: "./templates/template.html.njk",
+      watch: false,
+      watchRunner: false,
     };
   }
 
@@ -108,12 +111,12 @@ export default class Rebanna {
         // run command to create webfont
         exec(cmd, (err, stdout, stderr) => {
           if (err) {
-            console.error(`  💥 ERROR: ${err}`);
+            console.error(chalk.red.bold(`  💥 ERROR: ${err}`));
             return;
           }
 
           if (stderr) {
-            console.error(`  💥 ERROR: ${stderr}`);
+            console.error(chalk.red.bold(`  💥 ERROR: ${stderr}`));
             return;
           }
 
@@ -122,7 +125,31 @@ export default class Rebanna {
           callback();
         });
       }
-    ]);
+    ],
+    function(err, results) {
+      if(err) {
+        console.error(chalk.red.bold("  💥 ERROR: " + err + results));
+        process.exit(1);
+      }
+
+      // watch icon folder is watch option is enabled
+      if(options.watch && !options.watchRunner) {
+        // change watchRunner, thus running watch command once
+        _self.options.watchRunner = true;
+
+        let watcher = chokidar.watch(options.iconFolder, {
+          ignoreInitial: true
+        });
+
+        console.log(chalk.white("\n  Starting watching iconFolder for changes."));
+
+        watcher
+          .on("all", (event, path) => {
+            console.log(chalk.white("\n  File "+ path +" was changed ("+ chalk.gray(event) +").\n"));
+            _self.build();
+          });
+      }
+    });
   }
 
   clean(callback) {

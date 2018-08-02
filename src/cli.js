@@ -37,6 +37,10 @@ const cli = meow(
       template: {
         type: "string",
       },
+      watch: {
+        type: "boolean",
+        default: false,
+      },
     }
   }
 );
