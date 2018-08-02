@@ -302,9 +302,9 @@ export default class Rebanna {
               let builder = new xml2js.Builder();
               let xml = builder.buildObject(result);
 
-              className = (className !== "" ? "-" + className : "");
+              className = (className !== "" ? "___" + className : "");
 
-              let fileName = file.substr(0, file.length - 4) + "-" + i + className + ".svg";
+              let fileName = file.substr(0, file.length - 4) + "___" + i + className + ".svg";
 
               fs.writeFile(options.tempFolder + "/" + fileName, xml, (err) => {
                 if (err) {

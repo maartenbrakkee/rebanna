@@ -257,9 +257,9 @@ var Rebanna = function () {
                 var builder = new xml2js.Builder();
                 var xml = builder.buildObject(result);
 
-                className = className !== "" ? "-" + className : "";
+                className = className !== "" ? "___" + className : "";
 
-                var fileName = file.substr(0, file.length - 4) + "-" + i + className + ".svg";
+                var fileName = file.substr(0, file.length - 4) + "___" + i + className + ".svg";
 
                 fs.writeFile(options.tempFolder + "/" + fileName, xml, function (err) {
                   if (err) {

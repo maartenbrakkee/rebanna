@@ -1,6 +1,8 @@
 # Rebanna
 
-Rebanna is build to easily create a webfont with support of stacked icons.
+Rebanna is build to easily create a webfont with support of stacked/multicolored icons.
+
+![Changeable color](./docs/rebanna_color_change.gif)
 
 ## Getting started
 
@@ -77,6 +79,8 @@ Next to the npm scripts, a CLI is available. Run `rebanna [command] [options]` t
 ## About
 
 Ever thought about the correct name for a multi-layered-svgs-to-stacked-icons-from-a-webfont tool? I have, it's terrible, believe me. Therefore I just named it after a very special person who often makes me a stack of super fluffy banana pancakes :)
+
+Rebanna helps you creating a multicolored iconfont. Each layer can easily be styled with CSS.
 
 ## Contribution
 

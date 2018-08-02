@@ -133,7 +133,7 @@
     }
 
   {%- for glyph in glyphs -%}
-    {%- set icon = glyph.name.split('-') -%}
+    {%- set icon = glyph.name.split('___') -%}
     {% if icon[1] == 0 %}
     .{{ className }}-{{ icon[0] }}::before {
     {% elif icon[1] == 1 %}
@@ -156,7 +156,7 @@
   <h1>List Icons</h1>
   <div class="icons" id="icons">
     {%- for glyph in glyphs -%}
-    {%- set icon = glyph.name.split('-') -%}
+    {%- set icon = glyph.name.split('___') -%}
     {% if icon[1] == 0 %}
       <div class="icon-wrap">
         <div>

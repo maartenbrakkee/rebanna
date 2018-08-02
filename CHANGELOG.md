@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.3.1] - 2018-08-02
+### Added
+- Color change example gif added.
+
+### Fixed
+- Input SVG filenames can now have `-`, as automatic group splitting is done with `___` now.
+
+## [0.3.0] - 2018-08-02
+### Added
+- `--watch` option added.
+
 ## [0.2.0] - 2018-08-01
 ### Added
 - `async`, `chalk` and `meow` modules for added CLI functionality.
