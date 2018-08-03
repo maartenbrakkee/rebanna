@@ -59,28 +59,34 @@ var Rebanna = function () {
       }, function (callback) {
         console.log(chalk.white.bold("\n  Starting " + chalk.blue("build") + " command."));
 
-        var cmd = "node ./node_modules/webfont/dist/cli.js \"" + options.tempFolder + "/*.svg\" --font-name=\"" + options.fontName + "\" --template-class-name=\"" + options.fontClassName + "\" --dest=\"" + options.destination + "/\" --template=\"" + options.template + "\" --fontHeight=1000";
-
-        // create destionation folder if it doesn't exists
-        if (!fs.existsSync(options.destination)) {
-          fs.mkdirSync(options.destination);
-        }
-
-        // run command to create webfont
-        exec(cmd, function (err, stdout, stderr) {
-          if (err) {
-            console.error(chalk.red.bold("  \uD83D\uDCA5 ERROR: " + err));
-            return;
+        fs.access(options.template, fs.constants.F_OK, function (error) {
+          if (error) {
+            options.template = "./node_modules/rebanna/" + options.template;
           }
 
-          if (stderr) {
-            console.error(chalk.red.bold("  \uD83D\uDCA5 ERROR: " + stderr));
-            return;
+          var cmd = "node ./node_modules/webfont/dist/cli.js \"" + options.tempFolder + "/*.svg\" --font-name=\"" + options.fontName + "\" --template-class-name=\"" + options.fontClassName + "\" --dest=\"" + options.destination + "/\" --template=\"" + options.template + "\" --fontHeight=1000";
+
+          // create destionation folder if it doesn't exists
+          if (!fs.existsSync(options.destination)) {
+            fs.mkdirSync(options.destination);
           }
 
-          console.log(chalk.white("  " + chalk.blue("build") + " command finished."));
-          console.log("  Webfont succesfully created 😄 🎉");
-          callback();
+          // run command to create webfont
+          exec(cmd, function (err, stdout, stderr) {
+            if (err) {
+              console.error(chalk.red.bold("  \uD83D\uDCA5 " + err));
+              return;
+            }
+
+            if (stderr) {
+              console.error(chalk.red.bold("  \uD83D\uDCA5 ERROR: " + stderr));
+              return;
+            }
+
+            console.log(chalk.white("  " + chalk.blue("build") + " command finished."));
+            console.log("  Webfont succesfully created 😄 🎉");
+            callback();
+          });
         });
       }], function (err, results) {
         if (err) {
@@ -147,26 +153,34 @@ var Rebanna = function () {
     key: "compress",
     value: function compress(callback) {
       var options = this.getOptions();
-      var cmd = "node ./node_modules/svgo/bin/svgo --config=\".svgo.yml\" --folder=\"" + options.iconFolder + "\" --output=\"" + options.tempFolder + "\"";
+      var svgoConfig = ".svgo.yml";
 
-      console.log(chalk.white.bold("  Starting " + chalk.blue("compress") + " command."));
-
-      // run command to create webfont
-      exec(cmd, function (err, stdout, stderr) {
-        if (err) {
-          console.error(chalk.red.bold("  \uD83D\uDCA5 ERROR: " + err));
-          return;
+      fs.access(svgoConfig, fs.constants.F_OK, function (error) {
+        if (error) {
+          svgoConfig = "./node_modules/rebanna/.svgo.yml";
         }
 
-        if (stderr) {
-          console.error(chalk.red.bold("  \uD83D\uDCA5 ERROR: " + stderr));
-          return;
-        }
+        var cmd = "node ./node_modules/svgo/bin/svgo --config=\"" + svgoConfig + "\" --folder=\"" + options.iconFolder + "\" --output=\"" + options.tempFolder + "\"";
 
-        console.log(chalk.white("  " + chalk.blue("compress") + " command finished."));
-        if (callback) {
-          callback();
-        }
+        console.log(chalk.white.bold("  Starting " + chalk.blue("compress") + " command."));
+
+        // run command to create webfont
+        exec(cmd, function (err, stdout, stderr) {
+          if (err) {
+            console.error(chalk.red.bold("  \uD83D\uDCA5 " + err));
+            return;
+          }
+
+          if (stderr) {
+            console.error(chalk.red.bold("  \uD83D\uDCA5 ERROR: " + stderr));
+            return;
+          }
+
+          console.log(chalk.white("  " + chalk.blue("compress") + " command finished."));
+          if (callback) {
+            callback();
+          }
+        });
       });
     }
   }, {
@@ -303,15 +317,20 @@ var Rebanna = function () {
   }, {
     key: "setOptions",
     value: function setOptions(optionsArray) {
+      var _this = this;
+
       var config = "config" in optionsArray ? "./" + optionsArray.config : "./.rebanna.js";
 
-      if (fs.existsSync(config)) {
-        var configOptions = require("." + config);
-        this.setOptionsFromArray(configOptions);
-      }
-
-      // populate options in class
-      this.setOptionsFromArray(optionsArray);
+      fs.access(config, fs.constants.F_OK, function (error) {
+        if (error) {
+          // populate options in class
+          _this.setOptionsFromArray(optionsArray);
+        } else {
+          var workingDir = process.cwd();
+          var configOptions = require(workingDir + "/" + config);
+          _this.setOptionsFromArray(configOptions);
+        }
+      });
     }
   }, {
     key: "setOptionsFromArray",
