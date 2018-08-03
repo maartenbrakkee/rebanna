@@ -17,20 +17,40 @@
     body {
       margin: 0;
       padding: 10px 20px;
-      background: #efefef;
+      background: #f3f3f3;
       color: #222;
       font-family: "Helvetica Neue", Arial, sans-serif;
     }
 
     h1 {
-      margin: 0 0 20px;
+      margin: 10px 0 20px;
       font-size: 32px;
       font-weight: normal;
+      text-align: center;
+    }
+    h1 span {
+      padding: 0 10px;
+      background: #f3f3f3;
+      display: inline-block;
+    }
+    h1:after {
+      border-bottom: 1px solid #b3b3b3;
+      content: '';
+      display: block;
+      position: relative;
+      top: -1rem;
+      z-index: -1;
+    }
+
+    .container {
+      margin: auto;
+      width: 100%;
     }
 
     .icons {
       margin-bottom: 40px;
-      column-count: 2;
+      margin-left: -10px;
+      margin-right: -20px;
     }
 
     @font-face {
@@ -71,13 +91,32 @@
     }
 
     .{{ className }} {
-      font-size: 10rem !important;
+      font-size: 7rem !important;
       margin-bottom: 1rem;
     }
     .{{ className }}-wrap {
+      border-radius: 4px;
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+      display: inline-block;
+      height: 10rem;
+      margin: 10px;
+      overflow: hidden;
       text-align: center;
-      height: 12rem;
-      break-inside: avoid-column;
+      transition: background 0.2s ease-out, box-shadow 0.3s ease-in-out;
+      width: calc((100% - (4 * 20px)) / 2);
+    }
+    .{{ className }}-class {
+      color: #b3b3b3;
+      font-size: .675rem;
+      padding: 10px;
+    }
+    .{{ className }}-wrap:hover {
+      background: #fff;
+      box-shadow: 0 3px 10px 0 rgba(0,0,0,0.3);
+    }
+    .{{ className }}-wrap:hover .{{ className }}-class {
+      background: #cecece;
+      color: #939393;
     }
 
     .{{ className }} {
@@ -150,22 +189,73 @@
       color: var(--{{ icon[2] }});
     }
   {%- endfor -%}
+
+  @media only screen and (min-width: 580px) {
+    .container {
+      width: 520px;
+    }
+    .{{ className }}-wrap {
+      width: calc((100% - (5 * 20px)) / 3);
+    }
+  }
+  @media only screen and (min-width: 720px) {
+    .container {
+      width: 660px;
+    }
+    .{{ className }}-wrap {
+      width: calc((100% - (6 * 20px)) / 4);
+    }
+  }
+  @media only screen and (min-width: 890px) {
+    .container {
+      width: 830px;
+    }
+    .{{ className }}-wrap {
+      width: calc((100% - (7 * 20px)) / 5);
+    }
+  }
+  @media only screen and (min-width: 1000px) {
+    .container {
+      width: 940px;
+    }
+    .{{ className }}-wrap {
+      width: calc((100% - (7 * 20px)) / 5);
+    }
+  }
+  @media only screen and (min-width: 1100px) {
+    .container {
+      width: 1040px;
+    }
+    .{{ className }}-wrap {
+      width: calc((100% - (8 * 20px)) / 6);
+    }
+  }
+  @media only screen and (min-width: 1260px) {
+    .container {
+      width: 1200px;
+    }
+    .{{ className }}-wrap {
+      width: calc((100% - (10 * 20px)) / 8);
+    }
+  }
   </style>
 </head>
 <body>
-  <h1>List Icons</h1>
-  <div class="icons" id="icons">
-    {%- for glyph in glyphs -%}
-    {%- set icon = glyph.name.split('___') -%}
-    {% if icon[1] == 0 %}
-      <div class="icon-wrap">
-        <div>
-          <i class="{{ className }} {{ className }}-{{ icon[0] }}"><i><i></i></i></i>
+  <div class="container">
+    <h1><span>{{ fontName }}</span></h1>
+    <div class="icons" id="icons">
+      {%- for glyph in glyphs -%}
+      {%- set icon = glyph.name.split('___') -%}
+      {% if icon[1] == 0 %}
+        <div class="icon-wrap">
+          <div>
+            <i class="{{ className }} {{ className }}-{{ icon[0] }}"><i><i></i></i></i>
+          </div>
+          <div class="icon-class">{{ className }}-{{ icon[0] }}</div>
         </div>
-        <span class="icon-class">{{ className }}-{{ icon[0] }}</span>
-      </div>
-    {% endif %}
-    {%- endfor -%}
+      {% endif %}
+      {%- endfor -%}
+    </div>
   </div>
 </body>
 </html>
