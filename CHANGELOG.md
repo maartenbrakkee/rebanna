@@ -1,13 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [0.3.3] - 2018-08-03
-### Fixed
-- Improved generated HTML.
-
-## [0.3.2] - 2018-08-03
+## [0.3.2-0.3.4] - 2018-08-03
 ### Fixed
 - Fix paths for config files when installed as module.
+- Improved generated HTML.
+- Update README.
 
 ## [0.3.1] - 2018-08-02
 ### Added

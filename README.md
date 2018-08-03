@@ -8,7 +8,8 @@ Rebanna is build to easily create a webfont with support of stacked/multicolored
 
 ### Prerequisites
 
-*Rebanna* can be installed through `npm`. When you install [Node.js](https://nodejs.org/), the package manager will also be installed.
+1. NPM. *Rebanna* can be installed through `npm`. When you install [Node.js](https://nodejs.org/), the package manager will also be installed.
+2. [Windows-Build-Tools](https://github.com/felixrieseberg/windows-build-tools) - Run as administrator `npm install --global --production windows-build-tools`.
 
 ### Installing
 
