@@ -73,14 +73,26 @@
       color: #b3b3b3;
       font-size: .675rem;
       padding: 10px;
+      position: relative;
     }
     .{{ className }}-wrap:hover {
       background: #fff;
       box-shadow: 0 3px 10px 0 rgba(0,0,0,0.3);
+      cursor: pointer;
     }
     .{{ className }}-wrap:hover .{{ className }}-class {
       background: #cecece;
       color: #939393;
+    }
+    .{{ className }}-wrap:hover .{{ className }}-class:after {
+      background: #cecece;
+      content: "</>";
+      display: block;
+      font-family: monospace;
+      padding: 0 .25rem;
+      position: absolute;
+      right: 0;
+      top: .675rem;
     }
 
     @media only screen and (min-width: 580px) {
@@ -240,5 +252,20 @@
       {%- endfor -%}
     </div>
   </div>
+
+  <script>
+    var wraps = document.getElementsByClassName("icon-wrap");
+
+    for (var i = 0, length = wraps.length; i < length; i++) {
+      wraps[i].addEventListener("click", function(element) {
+        var code = element.currentTarget.firstElementChild.innerHTML;
+        copyToClipboard(code.trim());
+      });
+    }
+
+    function copyToClipboard(text) {
+      window.prompt("Copy to clipboard", text);
+    }
+  </script>
 </body>
 </html>

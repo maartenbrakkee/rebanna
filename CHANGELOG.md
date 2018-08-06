@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.4.1] - 2018-08-06
+### Added
+- HTML template shows alert on click (with highlighted code for copy to clipboard).
+
 ## [0.4.0] - 2018-08-06
 ### Added
 - Multiple templates functionality added.
