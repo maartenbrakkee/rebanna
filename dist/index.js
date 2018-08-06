@@ -64,83 +64,16 @@ var Rebanna = function () {
       }, function (callback) {
         console.log(chalk.white.bold("\n  Starting " + chalk.blue("build") + " command."));
 
-        var jsonTemplate = options.jsonTemplate;
-
-        fs.access(jsonTemplate, fs.constants.F_OK, function (error) {
-          if (error) {
-            jsonTemplate = "./node_modules/rebanna/" + jsonTemplate;
-            options.jsonTemplate = jsonTemplate;
-          }
-
-          var cmd = "node ./node_modules/webfont/dist/cli.js \"" + options.tempFolder + "/*.svg\" --font-name=\"" + options.fontName + "\" --template-class-name=\"" + options.fontClassName + "\" --dest=\"" + options.destination + "/\" --template=\"" + jsonTemplate + "\" --fontHeight=1000";
-
-          // create destionation folder if it doesn't exists
-          if (!fs.existsSync(options.destination)) {
-            fs.mkdirSync(options.destination);
-          }
-
-          // run command to create webfont
-          exec(cmd, function (err, stdout, stderr) {
-            if (err) {
-              console.error(chalk.red.bold("  \uD83D\uDCA5 " + err));
-              return;
-            }
-
-            if (stderr) {
-              console.error(chalk.red.bold("  \uD83D\uDCA5 ERROR: " + stderr));
-              return;
-            }
-
-            console.log("  Webfont succesfully created 😄 🎉");
-            callback();
-          });
-        });
+        _self.webfont(callback);
       }, function (callback) {
-        // remove .njk from string and update path
-        var jsonTemplate = options.jsonTemplate.slice(0, -4).split("/");
-        jsonTemplate = options.destination + "/" + jsonTemplate[jsonTemplate.length - 1];
-
-        // read generated json
-        fs.access(jsonTemplate, fs.constants.F_OK, function (error) {
-          if (error) {
-            console.error(chalk.red.bold("  💥 " + error));
-          }
-
-          var workingDir = process.cwd();
-          var nunjucksOptions = require(workingDir + "/" + jsonTemplate);
-
-          var result = void 0;
-
-          _async2.default.eachOf(options.template, function (template, key, callback) {
-            console.log(chalk.white.bold("  Creating template (" + chalk.gray(template) + ")."));
-            result = _nunjucks2.default.render(workingDir + "/" + template, nunjucksOptions);
-
-            // remove .njk from string and update path
-            var templateExport = template.slice(0, -4).split("/");
-            templateExport = options.destination + "/" + templateExport[templateExport.length - 1];
-
-            fs.writeFile(templateExport, result, function (error) {
-              if (error) {
-                console.error(chalk.red.bold("  💥 " + error));
-              }
-
-              console.log(chalk.white.bold("  Template (" + chalk.gray(templateExport) + ") saved."));
-              callback();
-            });
-          }, function (error) {
-            if (error) {
-              console.error(chalk.red.bold("  💥 " + error));
-            }
-
-            console.log(chalk.white("  " + chalk.blue("build") + " command finished."));
-            callback();
-          });
-        });
+        _self.createTemplates(callback);
       }], function (err, results) {
         if (err) {
           console.error(chalk.red.bold("  💥 ERROR: " + err + results));
           process.exit(1);
         }
+
+        console.log(chalk.white("  " + chalk.blue("build") + " command finished."));
 
         // watch icon folder is watch option is enabled
         if (options.watch && !options.watchRunner) {
@@ -163,7 +96,8 @@ var Rebanna = function () {
   }, {
     key: "clean",
     value: function clean(callback) {
-      var options = this.getOptions();
+      var options = this.options;
+
       var folders = [{
         name: "Destination",
         path: options.destination
@@ -344,13 +278,102 @@ var Rebanna = function () {
       });
     }
   }, {
+    key: "webfont",
+    value: function webfont(callback) {
+      var options = this.options;
+      var jsonTemplate = options.jsonTemplate;
+
+      fs.access(jsonTemplate, fs.constants.F_OK, function (error) {
+        if (error) {
+          jsonTemplate = "./node_modules/rebanna/" + jsonTemplate;
+          options.jsonTemplate = jsonTemplate;
+        }
+
+        var cmd = "node ./node_modules/webfont/dist/cli.js \"" + options.tempFolder + "/*.svg\" --font-name=\"" + options.fontName + "\" --template-class-name=\"" + options.fontClassName + "\" --dest=\"" + options.destination + "/\" --template=\"" + jsonTemplate + "\" --fontHeight=1000";
+
+        // create destionation folder if it doesn't exists
+        if (!fs.existsSync(options.destination)) {
+          fs.mkdirSync(options.destination);
+        }
+
+        // run command to create webfont
+        exec(cmd, function (err, stdout, stderr) {
+          if (err) {
+            console.error(chalk.red.bold("  \uD83D\uDCA5 " + err));
+            return;
+          }
+
+          if (stderr) {
+            console.error(chalk.red.bold("  \uD83D\uDCA5 ERROR: " + stderr));
+            return;
+          }
+
+          console.log("  Webfont succesfully created.");
+          callback();
+        });
+      });
+    }
+  }, {
+    key: "createTemplates",
+    value: function createTemplates(callback) {
+      // remove .njk from string and update path
+      var options = this.options;
+      var jsonTemplate = options.jsonTemplate.slice(0, -4).split("/");
+      jsonTemplate = options.destination + "/" + jsonTemplate[jsonTemplate.length - 1];
+
+      // read generated json
+      fs.access(jsonTemplate, fs.constants.F_OK, function (error) {
+        if (error) {
+          console.error(chalk.red.bold("  💥 " + error));
+        }
+
+        var workingDir = process.cwd();
+        var nunjucksOptions = require(workingDir + "/" + jsonTemplate);
+
+        var result = void 0;
+
+        _async2.default.eachOf(options.template, function (template, key, callback) {
+          console.log(chalk.white.bold("  Creating template (" + chalk.gray(template) + ")."));
+
+          fs.access(template, fs.constants.F_OK, function (error) {
+            if (error) {
+              template = "./node_modules/rebanna/" + template;
+            }
+            console.log(nunjucksOptions.formats);
+            result = _nunjucks2.default.render(workingDir + "/" + template, nunjucksOptions);
+
+            // remove .njk from string and update path
+            var templateExport = template.slice(0, -4).split("/");
+            templateExport = options.destination + "/" + templateExport[templateExport.length - 1];
+
+            fs.writeFile(templateExport, result, function (error) {
+              if (error) {
+                console.error(chalk.red.bold("  💥 " + error));
+              }
+
+              console.log(chalk.white.bold("  Template (" + chalk.gray(templateExport) + ") saved."));
+              callback();
+            });
+          });
+        }, function (error) {
+          if (error) {
+            console.error(chalk.red.bold("  💥 " + error));
+          }
+
+          callback();
+        });
+      });
+    }
+  }, {
     key: "run",
     value: function run(command, options) {
-      // update options
-      this.setOptions(options);
+      var _self = this;
 
-      // run command
-      this[command]();
+      // update options
+      this.setOptions(options, function () {
+        // run command
+        _self[command]();
+      });
     }
   }, {
     key: "getHelp",
@@ -364,7 +387,7 @@ var Rebanna = function () {
     }
   }, {
     key: "setOptions",
-    value: function setOptions(optionsArray) {
+    value: function setOptions(optionsArray, callback) {
       var _this = this;
 
       var config = "config" in optionsArray ? "./" + optionsArray.config : "./.rebanna.js";
@@ -377,6 +400,8 @@ var Rebanna = function () {
         }
         // always populate options from commandline
         _this.setOptionsFromArray(optionsArray);
+
+        callback();
       });
     }
   }, {
