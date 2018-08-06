@@ -39,8 +39,10 @@ module.exports = {
   "iconFolder": "./icons",
   // temporary folder
   "tempFolder": "./.tmp",
-  // template for generating html, css or scss
-  "template": "./templates/template.html.njk",
+  // templates for generating html, css or scss
+  "template": [
+    "./templates/template.html.njk"
+  ],
 }
 ```
 
@@ -74,7 +76,7 @@ Next to the npm scripts, a CLI is available. Run `rebanna [command] [options]` t
 | `--fontClassName` | The classname prefix for the icons. |
 | `-i`, `--iconFolder` | The source folder for the icons. |
 | `--tempFolder` | Temporary folder for processing. |
-| `--template` | Nunjucks template for generating HTML, CSS or SCSS. More information about Nunjucks templates can be found at: [https://bit.ly/2v0E7Ha](https://bit.ly/2v0E7Ha). |
+| `--template` | An array of Nunjucks templates for generating HTML, CSS or SCSS. More information about Nunjucks templates can be found at: [https://bit.ly/2v0E7Ha](https://bit.ly/2v0E7Ha). |
 | `--watch` | Add this option if you want the iconFolder to be watched. Triggers `build` on added, changed or removed file. |
 
 ## About

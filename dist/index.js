@@ -10,6 +10,10 @@ var _async = require("async");
 
 var _async2 = _interopRequireDefault(_async);
 
+var _nunjucks = require("nunjucks");
+
+var _nunjucks2 = _interopRequireDefault(_nunjucks);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27,7 +31,7 @@ var Rebanna = function () {
   function Rebanna() {
     _classCallCheck(this, Rebanna);
 
-    this.help = "\n      Usage: rebanna " + chalk.blue("[command]") + " " + chalk.green("[options]") + "\n\n      " + chalk.blue("Commands:") + "\n\n          build\n\n              Run clean, compress and split commands, Builds the webfont. Before\n              building clean, compress and split commands will be run.\n\n          clean\n\n              Cleans the destination and temporary folder.\n\n          compress\n\n              Compresses all SVG files found in the icon source folder.\n\n          split\n\n              Split all compressed SVG files from the temporary folder.\n\n      " + chalk.green("Options:") + "\n\n          -c, --config\n\n              Path to a specific configuration file.\n\n          --debug\n\n              Show extra information for debugging.\n\n          -d, --destination\n\n              The destination for the generated webfont.\n\n          --fontName\n\n              The name for the font.\n\n          --fontClassName\n\n              The classname prefix for the icons.\n\n          -i, --iconFolder\n\n              The source folder for the icons.\n\n          --tempFolder\n\n              Temporary folder for processing.\n\n          --template\n\n              Nunjucks template for generating HTML, CSS or SCSS. More information\n              about Nunjucks templates can be found at: https://bit.ly/2v0E7Ha.\n    ";
+    this.help = "\n      Usage: rebanna " + chalk.blue("[command]") + " " + chalk.green("[options]") + "\n\n      " + chalk.blue("Commands:") + "\n\n          build\n\n              Run clean, compress and split commands, Builds the webfont. Before\n              building clean, compress and split commands will be run.\n\n          clean\n\n              Cleans the destination and temporary folder.\n\n          compress\n\n              Compresses all SVG files found in the icon source folder.\n\n          split\n\n              Split all compressed SVG files from the temporary folder.\n\n      " + chalk.green("Options:") + "\n\n          -c, --config\n\n              Path to a specific configuration file.\n\n          --debug\n\n              Show extra information for debugging.\n\n          -d, --destination\n\n              The destination for the generated webfont.\n\n          --fontName\n\n              The name for the font.\n\n          --fontClassName\n\n              The classname prefix for the icons.\n\n          -i, --iconFolder\n\n              The source folder for the icons.\n\n          --tempFolder\n\n              Temporary folder for processing.\n\n          --template\n\n              An array of Nunjucks template for generating HTML, CSS or SCSS.\n              More information about Nunjucks templates can be found at:\n              https://bit.ly/2v0E7Ha.\n\n          --watch\n\n              Add this option if you want the iconFolder to be watched. Triggers\n              " + chalk.blue("build") + " on added, changed or removed file.\n\n    ";
     this.options = {
       config: "",
       debug: false,
@@ -35,8 +39,9 @@ var Rebanna = function () {
       fontName: "iconfont",
       fontClassName: "icon",
       iconFolder: "./icons",
+      jsonTemplate: "./templates/template.js.njk",
       tempFolder: "./.tmp",
-      template: "./templates/template.html.njk",
+      template: ["./templates/iconfont.css.njk", "./templates/iconfont.html.njk", "./templates/iconfont.scss.njk"],
       watch: false,
       watchRunner: false
     };
@@ -59,12 +64,15 @@ var Rebanna = function () {
       }, function (callback) {
         console.log(chalk.white.bold("\n  Starting " + chalk.blue("build") + " command."));
 
-        fs.access(options.template, fs.constants.F_OK, function (error) {
+        var jsonTemplate = options.jsonTemplate;
+
+        fs.access(jsonTemplate, fs.constants.F_OK, function (error) {
           if (error) {
-            options.template = "./node_modules/rebanna/" + options.template;
+            jsonTemplate = "./node_modules/rebanna/" + jsonTemplate;
+            options.jsonTemplate = jsonTemplate;
           }
 
-          var cmd = "node ./node_modules/webfont/dist/cli.js \"" + options.tempFolder + "/*.svg\" --font-name=\"" + options.fontName + "\" --template-class-name=\"" + options.fontClassName + "\" --dest=\"" + options.destination + "/\" --template=\"" + options.template + "\" --fontHeight=1000";
+          var cmd = "node ./node_modules/webfont/dist/cli.js \"" + options.tempFolder + "/*.svg\" --font-name=\"" + options.fontName + "\" --template-class-name=\"" + options.fontClassName + "\" --dest=\"" + options.destination + "/\" --template=\"" + jsonTemplate + "\" --fontHeight=1000";
 
           // create destionation folder if it doesn't exists
           if (!fs.existsSync(options.destination)) {
@@ -83,8 +91,48 @@ var Rebanna = function () {
               return;
             }
 
-            console.log(chalk.white("  " + chalk.blue("build") + " command finished."));
             console.log("  Webfont succesfully created 😄 🎉");
+            callback();
+          });
+        });
+      }, function (callback) {
+        // remove .njk from string and update path
+        var jsonTemplate = options.jsonTemplate.slice(0, -4).split("/");
+        jsonTemplate = options.destination + "/" + jsonTemplate[jsonTemplate.length - 1];
+
+        // read generated json
+        fs.access(jsonTemplate, fs.constants.F_OK, function (error) {
+          if (error) {
+            console.error(chalk.red.bold("  💥 " + error));
+          }
+
+          var workingDir = process.cwd();
+          var nunjucksOptions = require(workingDir + "/" + jsonTemplate);
+
+          var result = void 0;
+
+          _async2.default.eachOf(options.template, function (template, key, callback) {
+            console.log(chalk.white.bold("  Creating template (" + chalk.gray(template) + ")."));
+            result = _nunjucks2.default.render(workingDir + "/" + template, nunjucksOptions);
+
+            // remove .njk from string and update path
+            var templateExport = template.slice(0, -4).split("/");
+            templateExport = options.destination + "/" + templateExport[templateExport.length - 1];
+
+            fs.writeFile(templateExport, result, function (error) {
+              if (error) {
+                console.error(chalk.red.bold("  💥 " + error));
+              }
+
+              console.log(chalk.white.bold("  Template (" + chalk.gray(templateExport) + ") saved."));
+              callback();
+            });
+          }, function (error) {
+            if (error) {
+              console.error(chalk.red.bold("  💥 " + error));
+            }
+
+            console.log(chalk.white("  " + chalk.blue("build") + " command finished."));
             callback();
           });
         });
@@ -322,14 +370,13 @@ var Rebanna = function () {
       var config = "config" in optionsArray ? "./" + optionsArray.config : "./.rebanna.js";
 
       fs.access(config, fs.constants.F_OK, function (error) {
-        if (error) {
-          // populate options in class
-          _this.setOptionsFromArray(optionsArray);
-        } else {
+        if (!error) {
           var workingDir = process.cwd();
           var configOptions = require(workingDir + "/" + config);
           _this.setOptionsFromArray(configOptions);
         }
+        // always populate options from commandline
+        _this.setOptionsFromArray(optionsArray);
       });
     }
   }, {

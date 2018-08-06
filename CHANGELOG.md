@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2018-08-06
+### Added
+- Multiple templates functionality added.
+
+### Fixed
+- Fix commandline arguments overwrite.
+
 ## [0.3.2-0.3.4] - 2018-08-03
 ### Fixed
 - Fix paths for config files when installed as module.

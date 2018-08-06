@@ -8,6 +8,7 @@ const rimraf = require("rimraf");
 const xml2js = require("xml2js");
 
 import async from "async";
+import nunjucks from "nunjucks";
 
 export default class Rebanna {
   constructor() {
@@ -65,8 +66,15 @@ export default class Rebanna {
 
           --template
 
-              Nunjucks template for generating HTML, CSS or SCSS. More information
-              about Nunjucks templates can be found at: https://bit.ly/2v0E7Ha.
+              An array of Nunjucks template for generating HTML, CSS or SCSS.
+              More information about Nunjucks templates can be found at:
+              https://bit.ly/2v0E7Ha.
+
+          --watch
+
+              Add this option if you want the iconFolder to be watched. Triggers
+              ${chalk.blue("build")} on added, changed or removed file.
+
     `;
     this.options = {
       config: "",
@@ -75,8 +83,13 @@ export default class Rebanna {
       fontName: "iconfont",
       fontClassName: "icon",
       iconFolder: "./icons",
+      jsonTemplate: "./templates/template.js.njk",
       tempFolder: "./.tmp",
-      template: "./templates/template.html.njk",
+      template: [
+        "./templates/iconfont.css.njk",
+        "./templates/iconfont.html.njk",
+        "./templates/iconfont.scss.njk",
+      ],
       watch: false,
       watchRunner: false,
     };
@@ -101,12 +114,15 @@ export default class Rebanna {
       function(callback) {
         console.log(chalk.white.bold("\n  Starting "+ chalk.blue("build") +" command."));
 
-        fs.access(options.template, fs.constants.F_OK, (error) => {
+        let jsonTemplate = options.jsonTemplate;
+
+        fs.access(jsonTemplate, fs.constants.F_OK, (error) => {
           if (error) {
-            options.template = "./node_modules/rebanna/" + options.template;
+            jsonTemplate = "./node_modules/rebanna/" + jsonTemplate;
+            options.jsonTemplate = jsonTemplate;
           }
 
-          let cmd = "node ./node_modules/webfont/dist/cli.js \"" + options.tempFolder + "/*.svg\" --font-name=\"" + options.fontName + "\" --template-class-name=\"" + options.fontClassName + "\" --dest=\"" + options.destination + "/\" --template=\"" + options.template + "\" --fontHeight=1000";
+          let cmd = "node ./node_modules/webfont/dist/cli.js \"" + options.tempFolder + "/*.svg\" --font-name=\"" + options.fontName + "\" --template-class-name=\"" + options.fontClassName + "\" --dest=\"" + options.destination + "/\" --template=\"" + jsonTemplate + "\" --fontHeight=1000";
 
           // create destionation folder if it doesn't exists
           if (!fs.existsSync(options.destination)){
@@ -125,12 +141,53 @@ export default class Rebanna {
               return;
             }
 
-            console.log(chalk.white("  "+ chalk.blue("build") +" command finished."));
             console.log("  Webfont succesfully created 😄 🎉");
             callback();
           });
         });
-      }
+      },
+      function(callback) {
+        // remove .njk from string and update path
+        let jsonTemplate = options.jsonTemplate.slice(0, -4).split("/");
+        jsonTemplate = options.destination + "/" + jsonTemplate[jsonTemplate.length - 1];
+
+        // read generated json
+        fs.access(jsonTemplate, fs.constants.F_OK, (error) => {
+          if (error) {
+            console.error(chalk.red.bold("  💥 " + error));
+          }
+
+          let workingDir = process.cwd();
+          let nunjucksOptions = require(workingDir + "/" + jsonTemplate);
+
+          let result;
+
+          async.eachOf(options.template, function(template, key, callback) {
+            console.log(chalk.white.bold("  Creating template ("+ chalk.gray(template) +")."));
+            result = nunjucks.render(workingDir + "/" + template, nunjucksOptions);
+
+            // remove .njk from string and update path
+            let templateExport = template.slice(0, -4).split("/");
+            templateExport = options.destination + "/" + templateExport[templateExport.length - 1];
+
+            fs.writeFile(templateExport, result, function(error) {
+              if(error) {
+                console.error(chalk.red.bold("  💥 " + error));
+              }
+
+              console.log(chalk.white.bold("  Template ("+ chalk.gray(templateExport) +") saved."));
+              callback();
+            });
+          }, function (error) {
+            if (error) {
+              console.error(chalk.red.bold("  💥 " + error));
+            }
+
+            console.log(chalk.white("  "+ chalk.blue("build") +" command finished."));
+            callback();
+          });
+        });
+      },
     ],
     function(err, results) {
       if(err) {
@@ -362,14 +419,13 @@ export default class Rebanna {
     let config = ("config" in optionsArray ? "./" +  optionsArray.config : "./.rebanna.js");
 
     fs.access(config, fs.constants.F_OK, (error) => {
-      if (error) {
-        // populate options in class
-        this.setOptionsFromArray(optionsArray);
-      } else {
+      if (!error) {
         let workingDir = process.cwd();
         let configOptions = require(workingDir + "/" + config);
         this.setOptionsFromArray(configOptions);
       }
+      // always populate options from commandline
+      this.setOptionsFromArray(optionsArray);
     });
   }
 
