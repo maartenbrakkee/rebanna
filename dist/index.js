@@ -339,7 +339,7 @@ var Rebanna = function () {
             if (error) {
               template = "./node_modules/rebanna/" + template;
             }
-            console.log(nunjucksOptions.formats);
+
             result = _nunjucks2.default.render(workingDir + "/" + template, nunjucksOptions);
 
             // remove .njk from string and update path

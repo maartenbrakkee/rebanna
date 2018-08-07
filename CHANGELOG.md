@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [0.4.3] - 2018-08-07
+## [0.4.3-0.4.4] - 2018-08-07
 ### Fixed
 - Don't print debug information to console.
 
