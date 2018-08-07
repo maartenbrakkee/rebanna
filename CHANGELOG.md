@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.4.3] - 2018-08-07
+### Fixed
+- Don't print debug information to console.
+
 ## [0.4.1-0.4.2] - 2018-08-06
 ### Added
 - HTML template shows alert on click (with highlighted code for copy to clipboard).

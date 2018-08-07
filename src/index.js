@@ -392,7 +392,7 @@ export default class Rebanna {
           if (error) {
             template = "./node_modules/rebanna/" + template;
           }
-          console.log(nunjucksOptions.formats);
+
           result = nunjucks.render(workingDir + "/" + template, nunjucksOptions);
 
           // remove .njk from string and update path
