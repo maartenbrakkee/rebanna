@@ -36,6 +36,10 @@ export default class Rebanna {
 
       ${chalk.green("Options:")}
 
+          --clean
+
+              Clean also on build.
+
           -c, --config
 
               Path to a specific configuration file.
@@ -56,6 +60,10 @@ export default class Rebanna {
 
               The classname prefix for the icons.
 
+          --fontTemplatePath
+
+              Font path that will be used in generated templates.
+
           -i, --iconFolder
 
               The source folder for the icons.
@@ -67,7 +75,7 @@ export default class Rebanna {
           --template
 
               An array of Nunjucks template for generating HTML, CSS or SCSS.
-              More information about Nunjucks templates can be found at:
+              More information about Nunjucks templates can be found at
               https://bit.ly/2v0E7Ha.
 
           --watch
@@ -77,11 +85,13 @@ export default class Rebanna {
 
     `;
     this.options = {
+      clean: false,
       config: "",
       debug: false,
       destination: "./font",
       fontName: "iconfont",
       fontClassName: "icon",
+      fontTemplatePath: "./font",
       iconFolder: "./icons",
       jsonTemplate: "./templates/template.js.njk",
       tempFolder: "./.tmp",
@@ -161,6 +171,10 @@ export default class Rebanna {
         path: options.tempFolder
       }
     ];
+
+    if(!options.clean) {
+      folders = folders.splice(1, 1);
+    }
 
     console.log(chalk.white.bold("  Starting "+ chalk.blue("clean") +" command."));
 
@@ -268,17 +282,17 @@ export default class Rebanna {
             let groups = result.svg.g;
 
             if(typeof(groups) === "undefined") {
-              console.error(chalk.red.bold("  💥 ERROR: The file \""+ chalk.gray(file) +"\" doesn't have any top level groups. See https://git.io/fN2o2 for more information."));
+              console.error(chalk.red.bold("  💥 ERROR: The file \""+ chalk.gray(file) +"\" doesn't have any top-level groups. See https://git.io/fN2o2 for more information."));
               process.exit(1);
             }
 
             if(result.svg.rect || result.svg.circle || result.svg.ellipse || result.svg.line || result.svg.polyline || result.svg.polygon || result.svg.path) {
-              console.error(chalk.red.bold("  💥 ERROR: The file \""+ chalk.gray(file) +"\" contains top level elements that are not groups. See https://git.io/fN2o2 for more information."));
+              console.error(chalk.red.bold("  💥 ERROR: The file \""+ chalk.gray(file) +"\" contains top-level elements that are not groups. See https://git.io/fN2o2 for more information."));
               process.exit(1);
             }
 
             if(groups.length > 6) {
-              console.error(chalk.red.bold("  💥 ERROR: SVG has more then 6 top level groups. Icon font HTML support supports max. 6."));
+              console.error(chalk.red.bold("  💥 ERROR: SVG has more than 6 top-level groups. Icon font HTML support supports max. 6."));
               process.exit(1);
             }
 
@@ -289,7 +303,7 @@ export default class Rebanna {
               }
             });
 
-            // create seperate SVG's for each top level group
+            // create seperate SVG's for each top-level group
             let i = 0;
             groups.forEach(function(group) {
               // remove all groups
@@ -343,7 +357,7 @@ export default class Rebanna {
         options.jsonTemplate = jsonTemplate;
       }
 
-      let cmd = "node ./node_modules/webfont/dist/cli.js \"" + options.tempFolder + "/*.svg\" --font-name=\"" + options.fontName + "\" --template-class-name=\"" + options.fontClassName + "\" --dest=\"" + options.destination + "/\" --template=\"" + jsonTemplate + "\" --fontHeight=1000";
+      let cmd = "node ./node_modules/webfont/dist/cli.js \"" + options.tempFolder + "/*.svg\" --font-name=\"" + options.fontName + "\" --template-class-name=\"" + options.fontClassName + "\" --dest=\"" + options.destination + "/\" --template=\"" + jsonTemplate + "\" --template-font-path=\"" + options.fontTemplatePath + "\" --fontHeight=1000";
 
       // create destionation folder if it doesn't exists
       if (!fs.existsSync(options.destination)){

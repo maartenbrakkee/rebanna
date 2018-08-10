@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2018-08-10
+### Added
+- `fontTemplatePath` option, for correct font path in exported templates.
+- `clean` command is not run default on build. Option `--clean` added to overrule this.
+
+### Fixed
+- Correct `fontTemplatePath` variables in templates (except for HTML, which is a demo file).
+- Fix font name in templates.
+- Various text fixes in README and CHANGELOG.
+
 ## [0.4.3-0.4.4] - 2018-08-07
 ### Fixed
 - Don't print debug information to console.
@@ -17,7 +27,7 @@ All notable changes to this project will be documented in this file.
 - Multiple templates functionality added.
 
 ### Fixed
-- Fix commandline arguments overwrite.
+- Fix command line arguments overwrite.
 
 ## [0.3.2-0.3.4] - 2018-08-03
 ### Fixed
@@ -43,8 +53,8 @@ All notable changes to this project will be documented in this file.
 - After installing rebanna as a module it can be used like `rebanna [command] [options]`
 
 ### Fixed
-- Exit script when no top level groups are found inside SVG.
-- Exit script when top level groups are not groups.
+- Exit script when no top-level groups are found inside SVG.
+- Exit script when top-level groups are not groups.
 
 ### Removed
 - `clean.js`, `create-tmp-folder.js`, `nconf.js`, `split-svg.js`, `svgo.js` and `webfont.js` are removed in favor of `cli.js` and `index.js`.

@@ -1,6 +1,6 @@
 # Rebanna
 
-Rebanna is build to easily create a webfont with support of stacked/multicolored icons.
+Rebanna is build to easily create a webfont with the support of stacked/multicolored icons.
 
 ![Changeable color](./docs/rebanna_color_change.gif)
 
@@ -23,7 +23,7 @@ npm install rebanna
 
 ### Configuration
 
-Configuration can be done by command-line arguments or through a `.rebanna.js`-file. First command-line arguments will be used, followed by settings from the config file. Any non set options will be defaulted.
+Configuration can be done by command-line arguments or through a `.rebanna.js`-file. First, command-line arguments will be used, followed by settings from the config file. Any non-set options will be default.
 
 #### `.rebanna.js` example
 
@@ -50,12 +50,12 @@ module.exports = {
 
 Creating a webfont from SVG's with *rebanna* typically follows these steps:
 
-1. Store the [correctly formated SVG's](docs/format-svg.md) in the *icons* folder.
+1. Store the [correctly formatted SVG's](docs/format-svg.md) in the *icons* folder.
 2. Run `npm run build` on the command line to generate your webfont and template.
 
 ### CLI
 
-Next to the npm scripts, a CLI is available. Run `rebanna [command] [options]` to generate your webfont and template.
+Next, to the npm scripts, a CLI is available. Run `rebanna [command] [options]` to generate your webfont and template.
 
 #### Commands
 | Command | Description|
@@ -69,14 +69,16 @@ Next to the npm scripts, a CLI is available. Run `rebanna [command] [options]` t
 
 | Options | Description|
 | ------- |:-----------|
+| `--clean` | Run clean also on build. |
 | `-c`, `--config` | Path to a specific configuration file. |
 | `--debug` | Show extra information for debugging. |
 | `-d`, `--destination` | The destination for the generated webfont. |
 | `--fontName` | The name for the font. |
 | `--fontClassName` | The classname prefix for the icons. |
+| `--fontTemplatePath` | Font path that will be used in generated templates. |
 | `-i`, `--iconFolder` | The source folder for the icons. |
 | `--tempFolder` | Temporary folder for processing. |
-| `--template` | An array of Nunjucks templates for generating HTML, CSS or SCSS. More information about Nunjucks templates can be found at: [https://bit.ly/2v0E7Ha](https://bit.ly/2v0E7Ha). |
+| `--template` | An array of Nunjucks templates for generating HTML, CSS or SCSS. More information about Nunjucks templates can be found at [https://bit.ly/2v0E7Ha](https://bit.ly/2v0E7Ha). |
 | `--watch` | Add this option if you want the iconFolder to be watched. Triggers `build` on added, changed or removed file. |
 
 ## About

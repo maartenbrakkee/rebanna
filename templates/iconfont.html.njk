@@ -152,30 +152,30 @@
       {%- set size = formats.length -%}
       {%- set currentSize = 0 -%}
       {% if 'eot' in formats -%}
-      src: url("{{ fontPath }}{{ fontName }}.eot");
+      src: url("{{ fontName }}.eot");
       {%- endif %}
       src: {%- if 'eot' in formats -%}
-             url("{{ fontPath }}{{ fontName }}.eot?#iefix") format("embedded-opentype")
+             url("{{ fontName }}.eot?#iefix") format("embedded-opentype")
              {%- set currentSize = currentSize + 1 -%}
              {%- if currentSize != size -%}, {% else -%}; {% endif -%}
            {%- endif -%}
            {%- if 'woff2' in formats -%}
-             url("{{ fontPath }}{{ fontName }}.woff2") format("woff2")
+             url("{{ fontName }}.woff2") format("woff2")
              {%- set currentSize = currentSize + 1 -%}
              {%- if currentSize != size -%}, {% else -%}; {% endif -%}
            {%- endif -%}
            {%- if 'woff' in formats -%}
-             url("{{ fontPath }}{{ fontName }}.woff") format("woff")
+             url("{{ fontName }}.woff") format("woff")
              {%- set currentSize = currentSize + 1 -%}
              {%- if currentSize != size -%}, {% else -%}; {% endif -%}
            {%- endif -%}
            {%- if 'ttf' in formats -%}
-             url("{{ fontPath }}{{ fontName }}.ttf") format("truetype")
+             url("{{ fontName }}.ttf") format("truetype")
              {%- set currentSize = currentSize + 1 -%}
              {%- if currentSize != size -%}, {% else -%}; {% endif -%}
            {%- endif -%}
            {%- if 'svg' in formats -%}
-             url("{{ fontPath }}{{ fontName }}.svg#{{ fontName }}") format("svg")
+             url("{{ fontName }}.svg#{{ fontName }}") format("svg")
              {%- set currentSize = currentSize + 1 -%}
              {%- if currentSize != size -%}, {% else -%}; {% endif -%}
            {%- endif %}
@@ -209,7 +209,7 @@
       display: inline-block;
       transform: translate(0, 0);
       text-rendering: auto;
-      font-family: iconfont;
+      font-family: "{{ fontName }}";
       font-weight: normal;
       font-style: normal;
       font-size: inherit;

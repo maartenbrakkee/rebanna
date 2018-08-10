@@ -10,6 +10,10 @@ const cli = meow(
   rebanna.getHelp(),
   {
     flags: {
+      clean: {
+        type: "boolean",
+        default: false,
+      },
       config: {
         type: "string",
         alias: "c"
@@ -25,6 +29,9 @@ const cli = meow(
         type: "string",
       },
       fontClassName: {
+        type: "string",
+      },
+      fontTemplatePath: {
         type: "string",
       },
       iconFolder: {

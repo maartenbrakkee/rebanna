@@ -16,6 +16,10 @@ var rebanna = new _index2.default();
 var chalk = require("chalk");
 var cli = (0, _meow2.default)(rebanna.getHelp(), {
   flags: {
+    clean: {
+      type: "boolean",
+      default: false
+    },
     config: {
       type: "string",
       alias: "c"
@@ -31,6 +35,9 @@ var cli = (0, _meow2.default)(rebanna.getHelp(), {
       type: "string"
     },
     fontClassName: {
+      type: "string"
+    },
+    fontTemplatePath: {
       type: "string"
     },
     iconFolder: {
