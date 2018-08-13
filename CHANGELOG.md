@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.5.1] - 2018-08-13
+### Fixed
+- Fix naming in templates.
+
 ## [0.5.0] - 2018-08-10
 ### Added
 - `fontTemplatePath` option, for correct font path in exported templates.

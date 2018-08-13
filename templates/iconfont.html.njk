@@ -241,11 +241,11 @@
       {%- for glyph in glyphs -%}
       {%- set icon = glyph.name.split('___') -%}
       {% if icon[1] == 0 %}
-        <div class="icon-wrap">
+        <div class="{{ className }}-wrap">
           <div>
             <i class="{{ className }} {{ className }}-{{ icon[0] }}"><i><i></i></i></i>
           </div>
-          <div class="icon-class">{{ className }}-{{ icon[0] }}</div>
+          <div class="{{ className }}-class">{{ className }}-{{ icon[0] }}</div>
         </div>
       {% endif %}
       {%- endfor -%}
@@ -253,7 +253,7 @@
   </div>
 
   <script>
-    var wraps = document.getElementsByClassName("icon-wrap");
+    var wraps = document.getElementsByClassName("{{ className }}-wrap");
 
     for (var i = 0, length = wraps.length; i < length; i++) {
       wraps[i].addEventListener("click", function(element) {
