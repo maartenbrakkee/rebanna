@@ -24,7 +24,6 @@ var _require = require("child_process"),
 var chalk = require("chalk");
 var chokidar = require("chokidar");
 var fs = require("fs");
-var path = require("path");
 var rimraf = require("rimraf");
 var xml2js = require("xml2js");
 
@@ -149,9 +148,7 @@ var Rebanna = function () {
           svgoConfig = "./node_modules/rebanna/.svgo.yml";
         }
 
-        var svgoBin = path.resolve(__dirname, "../node_modules/svgo/bin/svgo");
-
-        var cmd = "node " + svgoBin + " --config=\"" + svgoConfig + "\" --folder=\"" + options.iconFolder + "\" --output=\"" + options.tempFolder + "\"";
+        var cmd = "node ./node_modules/svgo/bin/svgo --config=\"" + svgoConfig + "\" --folder=\"" + options.iconFolder + "\" --output=\"" + options.tempFolder + "\"";
 
         console.log(chalk.white.bold("  Starting " + chalk.blue("compress") + " command."));
 

@@ -4,7 +4,6 @@ const { exec } = require("child_process");
 const chalk = require("chalk");
 const chokidar = require("chokidar");
 const fs = require("fs");
-const path = require("path");
 const rimraf = require("rimraf");
 const xml2js = require("xml2js");
 
@@ -212,9 +211,7 @@ export default class Rebanna {
         svgoConfig = "./node_modules/rebanna/.svgo.yml";
       }
 
-      const svgoBin = path.resolve(__dirname, "../node_modules/svgo/bin/svgo");
-
-      let cmd = "node " + svgoBin + " --config=\"" + svgoConfig + "\" --folder=\"" + options.iconFolder + "\" --output=\"" + options.tempFolder + "\"";
+      let cmd = "node ./node_modules/svgo/bin/svgo --config=\"" + svgoConfig + "\" --folder=\"" + options.iconFolder + "\" --output=\"" + options.tempFolder + "\"";
 
       console.log(chalk.white.bold("  Starting "+ chalk.blue("compress") +" command."));
 
