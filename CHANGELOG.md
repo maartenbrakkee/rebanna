@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.5.2-0.5.3] - 2019-02-11
+### Fixed
+- Fixed SVGO command line call.
+- Updated dependencies.
+
 ## [0.5.1] - 2018-08-13
 ### Fixed
 - Fix naming in templates.

@@ -1,6 +1,6 @@
 {
   "name": "rebanna",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Rebanna is build to easily create a webfont with support of stacked icons.",
   "main": "./dist/cli.js",
   "scripts": {
@@ -35,7 +35,7 @@
     "meow": "^5.0.0",
     "nunjucks": "^3.1.7",
     "rimraf": "^2.6.2",
-    "svgo": "^1.1.1",
+    "svgo": "^1.0.5",
     "webfont": "^8.2.1",
     "xml2js": "^0.4.19"
   },
