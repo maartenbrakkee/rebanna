@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.5.7] - 2019-07-15
+### Fixed
+- Force versions for dependencies, as SVGO update did break the build process.
+
+## [0.5.5-0.5.6] - 2019-05-21
+### Fixed
+- Fix npm vulnerability.
+
 ## [0.5.2-0.5.4] - 2019-02-11
 ### Fixed
 - Fixed SVGO command line call.
