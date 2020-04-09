@@ -1,24 +1,21 @@
 #!/usr/bin/env node
-
 "use strict";
 
-var _meow = require("meow");
+var _meow = _interopRequireDefault(require("meow"));
 
-var _meow2 = _interopRequireDefault(_meow);
+var _index = _interopRequireDefault(require("./index"));
 
-var _index = require("./index");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var _index2 = _interopRequireDefault(_index);
+var rebanna = new _index["default"]();
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var rebanna = new _index2.default();
 var chalk = require("chalk");
-var cli = (0, _meow2.default)(rebanna.getHelp(), {
+
+var cli = (0, _meow["default"])(rebanna.getHelp(), {
   flags: {
     clean: {
       type: "boolean",
-      default: false
+      "default": false
     },
     config: {
       type: "string",
@@ -52,7 +49,7 @@ var cli = (0, _meow2.default)(rebanna.getHelp(), {
     },
     watch: {
       type: "boolean",
-      default: false
+      "default": false
     }
   }
 });
@@ -62,17 +59,15 @@ function runRebanna(input, flags) {
     return element !== "rebanna";
   });
   var commands = ["build", "clean", "compress", "split"];
+  console.log("\n  " + chalk.yellow.bold("Starting Rebanna...\n")); // exit on multiple commands
 
-  console.log("\n  " + chalk.yellow.bold("Starting Rebanna...\n"));
-
-  // exit on multiple commands
   if (command.length !== 1) {
     console.error(chalk.red.bold("  💥 ERROR: Multiple commands (" + command.join(", ") + ") found.\n"));
     console.error(chalk.white("  Only one command is allowed. Run " + chalk.gray("rebanna --help") + " for usage information."));
     process.exit(1);
-  }
+  } // command not found
 
-  // command not found
+
   if (!commands.includes(command[0])) {
     console.error(chalk.red.bold("  💥 ERROR: Unknown command (" + command[0] + ") found.\n"));
     console.error(chalk.white("  Run " + chalk.gray("rebanna --help") + " for usage information."));

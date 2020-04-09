@@ -1,6 +1,27 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.5.8] - 2020-04-09
+### Added
+- `babel.config.js` added (Babel upgrade).
+- `package-lock.json` added.
+
+### Changed
+- Line endings are now LF (ESlint setting).
+- Updated Babel to 7.x.
+- Updated ESlint to 6.8.0.
+- Updated async to 3.2.0.
+- Updated chalk to 3.0.0.
+- Updated meow to 6.1.0.
+- Updated nunjucks to 3.2.1.
+- Updated rimraf to 3.0.2.
+- Updated svgo to 1.3.2.
+- Updated webfont to 9.0.0.
+- Updated xml2js to 0.4.23.
+
+### Removed
+- `.babelrc` removed (Babel upgrade).
+
 ## [0.5.7] - 2019-07-15
 ### Fixed
 - Force versions for dependencies, as SVGO update did break the build process.
